@@ -16,6 +16,15 @@ class ToysController < ApplicationController
     toy.update(toy_params)
   end
 
+  def likes
+    toy = Toy.find(params[:id])
+    if toy.update(toy_params.merge(likes: toy.likes + 1))
+      render json: toy
+    else
+     render json: toy.errors, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     toy = Toy.find_by(id: params[:id])
     toy.destroy
@@ -23,7 +32,7 @@ class ToysController < ApplicationController
   end
 
   private
-  
+
   def toy_params
     params.permit(:name, :image, :likes)
   end
